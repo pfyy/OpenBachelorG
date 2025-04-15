@@ -1,0 +1,16 @@
+diff --git a/ak/smali/com/u8/sdk/U8UnityContext.smali b/ak/smali/com/u8/sdk/U8UnityContext.smali
+index f9c0128..1fe4779 100644
+--- a/ak/smali/com/u8/sdk/U8UnityContext.smali
++++ b/ak/smali/com/u8/sdk/U8UnityContext.smali
+@@ -60,7 +60,10 @@
+ 
+ # direct methods
+ .method static constructor <clinit>()V
+-    .locals 0
++    .locals 1
++
++    const-string v0, "florida"
++    invoke-static {v0}, Ljava/lang/System;->loadLibrary(Ljava/lang/String;)V
+ 
+     return-void
+ .end method

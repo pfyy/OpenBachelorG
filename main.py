@@ -8,7 +8,7 @@ BUILT_APK_FILEPATH = "ak-g-unsigned.apk"
 SIGNED_APK_DIRPATH = "ak-g-apk"
 
 
-SRC_GADGET_FILEPATH = "frida-gadget-16.6.6-android-arm64.so.xz"
+SRC_GADGET_FILEPATH = "frida-gadget-16.7.13-android-arm64.so.xz"
 DST_GADGET_FILENAME = "libflorida.so"
 
 

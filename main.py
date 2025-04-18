@@ -1,6 +1,7 @@
 import os
 import subprocess
 import lzma
+import xml.etree.ElementTree as ET
 
 APK_FILEPATH = "arknights-hg-2506.apk"
 DECODED_APK_DIRPATH = "ak"
@@ -15,6 +16,9 @@ DST_GADGET_FILENAME = "libflorida.so"
 SMALI_PATCH_FILEPATH = "smali.patch"
 
 GADGET_PORT = 10443
+
+
+ET.register_namespace("android", "http://schemas.android.com/apk/res/android")
 
 
 def clear_last_build():
@@ -115,12 +119,45 @@ def modify_smali():
     )
 
 
+def modify_manifest():
+    manifest_filepath = f"{DECODED_APK_DIRPATH}/AndroidManifest.xml"
+
+    tree = ET.parse(manifest_filepath)
+    root = tree.getroot()
+
+    root.set("package", "anime.pvz.online")
+
+    application_elem = root.find("application")
+    provider_elem_lst = application_elem.findall("provider")
+    for provider_elem in provider_elem_lst:
+        application_elem.remove(provider_elem)
+
+    tree.write(manifest_filepath, encoding="utf-8", xml_declaration=True)
+
+
+def modify_res(res_filepath):
+    tree = ET.parse(res_filepath)
+    root = tree.getroot()
+
+    string_elem = root.find("./string[@name='app_name']")
+    string_elem.text = "PvZ Online"
+
+    tree.write(res_filepath, encoding="utf-8", xml_declaration=True)
+
+
+def modify_name():
+    modify_res(f"{DECODED_APK_DIRPATH}/res/values/strings.xml")
+    modify_res(f"{DECODED_APK_DIRPATH}/res/values-zh/strings.xml")
+
+
 if __name__ == "__main__":
     clear_last_build()
     decode_apk()
 
     unzip_gadget()
     modify_smali()
+    modify_manifest()
+    modify_name()
 
     build_apk()
     sign_apk()

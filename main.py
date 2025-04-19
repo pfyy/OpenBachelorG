@@ -2,6 +2,7 @@ import os
 import subprocess
 import lzma
 import xml.etree.ElementTree as ET
+import sys
 
 APK_FILEPATH = "arknights-hg-2506.apk"
 DECODED_APK_DIRPATH = "ak"
@@ -14,6 +15,7 @@ DST_GADGET_FILENAME = "libflorida.so"
 
 
 SMALI_PATCH_FILEPATH = "smali.patch"
+PROXY_PATCH_FILEPATH = "proxy.patch"
 
 GADGET_PORT = 10443
 
@@ -119,6 +121,17 @@ def modify_smali():
     )
 
 
+def apply_proxy_patch():
+    subprocess.run(
+        [
+            "git",
+            "apply",
+            "-v",
+            PROXY_PATCH_FILEPATH,
+        ]
+    )
+
+
 def modify_manifest():
     manifest_filepath = f"{DECODED_APK_DIRPATH}/AndroidManifest.xml"
 
@@ -158,6 +171,9 @@ if __name__ == "__main__":
     modify_smali()
     modify_manifest()
     modify_name()
+
+    if "--proxy_patch" in sys.argv:
+        apply_proxy_patch()
 
     build_apk()
     sign_apk()

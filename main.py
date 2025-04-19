@@ -16,6 +16,7 @@ DST_GADGET_FILENAME = "libflorida.so"
 
 SMALI_PATCH_FILEPATH = "smali.patch"
 PROXY_PATCH_FILEPATH = "proxy.patch"
+MISC_PATCH_FILEPATH = "misc.patch"
 
 GADGET_PORT = 10443
 
@@ -110,26 +111,24 @@ def unzip_gadget():
         f.write(gadget_binary)
 
 
-def modify_smali():
+def apply_patch(patch_filepath):
     subprocess.run(
         [
             "git",
             "apply",
             "-v",
-            SMALI_PATCH_FILEPATH,
+            patch_filepath,
         ]
     )
+
+
+def modify_smali():
+    apply_patch(SMALI_PATCH_FILEPATH)
 
 
 def apply_proxy_patch():
-    subprocess.run(
-        [
-            "git",
-            "apply",
-            "-v",
-            PROXY_PATCH_FILEPATH,
-        ]
-    )
+    apply_patch(PROXY_PATCH_FILEPATH)
+    apply_patch(MISC_PATCH_FILEPATH)
 
 
 def modify_manifest():

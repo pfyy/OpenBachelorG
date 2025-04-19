@@ -1,0 +1,44 @@
+diff --git a/ak/smali/com/hg/sdk/MTPDetection.smali b/ak/smali/com/hg/sdk/MTPDetection.smali
+index 0455a5f..942ac6c 100644
+--- a/ak/smali/com/hg/sdk/MTPDetection.smali
++++ b/ak/smali/com/hg/sdk/MTPDetection.smali
+@@ -94,13 +94,7 @@
+ .end method
+ 
+ .method public onUserLogin(IILjava/lang/String;Ljava/lang/String;)V
+-    .locals 1
+-
+-    invoke-static {}, Lcom/hg/sdk/MTPSDK;->getInstance()Lcom/hg/sdk/MTPSDK;
+-
+-    move-result-object v0
+-
+-    invoke-virtual {v0, p1, p2, p3, p4}, Lcom/hg/sdk/MTPSDK;->onUserLogin(IILjava/lang/String;Ljava/lang/String;)V
++    .locals 0
+ 
+     return-void
+ .end method
+diff --git a/ak/smali/com/hg/sdk/MTPProxyApplication.smali b/ak/smali/com/hg/sdk/MTPProxyApplication.smali
+index a34190b..d4a2c5c 100644
+--- a/ak/smali/com/hg/sdk/MTPProxyApplication.smali
++++ b/ak/smali/com/hg/sdk/MTPProxyApplication.smali
+@@ -30,19 +30,7 @@
+ .end method
+ 
+ .method public onProxyCreate()V
+-    .locals 1
+-
+-    invoke-static {}, Lcom/hg/sdk/MTPSDK;->getInstance()Lcom/hg/sdk/MTPSDK;
+-
+-    move-result-object v0
+-
+-    invoke-virtual {v0}, Lcom/hg/sdk/MTPSDK;->initSDKWhenAppCreate()V
+-
+-    invoke-static {}, Lcom/hg/sdk/MTPSDK;->getInstance()Lcom/hg/sdk/MTPSDK;
+-
+-    move-result-object v0
+-
+-    invoke-virtual {v0}, Lcom/hg/sdk/MTPSDK;->initWhenActivityCreate()V
++    .locals 0
+ 
+     return-void
+ .end method

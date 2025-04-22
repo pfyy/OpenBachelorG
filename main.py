@@ -76,9 +76,9 @@ OLD_GADGET_ASSEMBLY = bytes.fromhex("43 34 8D 52")
 
 
 def get_new_gadget_assembly():
-    old_gadget_assembly_bin = bin(int.from_bytes(OLD_GADGET_ASSEMBLY[::-1]))[2:].rjust(
-        32, "0"
-    )
+    old_gadget_assembly_bin = bin(int.from_bytes(OLD_GADGET_ASSEMBLY[::-1], "big"))[
+        2:
+    ].rjust(32, "0")
 
     new_gadget_assembly_bin = (
         old_gadget_assembly_bin[:11]
@@ -86,7 +86,7 @@ def get_new_gadget_assembly():
         + old_gadget_assembly_bin[27:]
     )
 
-    new_gadget_assembly = int(new_gadget_assembly_bin, 2).to_bytes(4)[::-1]
+    new_gadget_assembly = int(new_gadget_assembly_bin, 2).to_bytes(4, "big")[::-1]
 
     return new_gadget_assembly
 

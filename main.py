@@ -142,7 +142,19 @@ def modify_manifest():
     application_elem = root.find("application")
     provider_elem_lst = application_elem.findall("provider")
     for provider_elem in provider_elem_lst:
-        application_elem.remove(provider_elem)
+        authorities_str = provider_elem.get(
+            "{http://schemas.android.com/apk/res/android}authorities", ""
+        )
+        if authorities_str.startswith("com.YoStarEN.Arknights"):
+            authorities_str = authorities_str.replace(
+                "com.YoStarEN.Arknights", "anime.pvz.online.en", 1
+            )
+            provider_elem.set(
+                "{http://schemas.android.com/apk/res/android}authorities",
+                authorities_str,
+            )
+        else:
+            application_elem.remove(provider_elem)
 
     # --- en permission ---
     permission_elem_lst = root.findall("permission")

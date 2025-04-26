@@ -2,9 +2,7 @@ diff --git a/ak/smali/okhttp3/HttpUrl.smali b/ak/smali/okhttp3/HttpUrl.smali
 index 031fb73..c4afb96 100644
 --- a/ak/smali/okhttp3/HttpUrl.smali
 +++ b/ak/smali/okhttp3/HttpUrl.smali
-@@ -584,8 +584,92 @@
-     goto :goto_0
- .end method
+@@ -584,6 +584,90 @@
  
 +.method public static redirect_url(Ljava/lang/String;)Ljava/lang/String;
 +    .registers 6
@@ -103,5 +101,5 @@ index 031fb73..c4afb96 100644
 -    invoke-virtual {v0, v1, p0}, Lokhttp3/HttpUrl$Builder;->parse(Lokhttp3/HttpUrl;Ljava/lang/String;)Lokhttp3/HttpUrl$Builder;
 +    invoke-virtual {v0, v1, v2}, Lokhttp3/HttpUrl$Builder;->parse(Lokhttp3/HttpUrl;Ljava/lang/String;)Lokhttp3/HttpUrl$Builder;
  
-     move-result-object v0
+     move-result-object p0
  

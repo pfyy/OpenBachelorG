@@ -4,7 +4,7 @@ import lzma
 import xml.etree.ElementTree as ET
 import sys
 
-APK_FILEPATH = "arknights-hg-2506.apk"
+APK_FILEPATH = "com.YoStarEN.Arknights.apk"
 DECODED_APK_DIRPATH = "ak"
 BUILT_APK_FILEPATH = "ak-g-unsigned.apk"
 SIGNED_APK_DIRPATH = "ak-g-apk"
@@ -137,12 +137,27 @@ def modify_manifest():
     tree = ET.parse(manifest_filepath)
     root = tree.getroot()
 
-    root.set("package", "anime.pvz.online")
+    root.set("package", "anime.pvz.online.en")
 
     application_elem = root.find("application")
     provider_elem_lst = application_elem.findall("provider")
     for provider_elem in provider_elem_lst:
         application_elem.remove(provider_elem)
+
+    # --- en permission ---
+    permission_elem_lst = root.findall("permission")
+    for permission_elem in permission_elem_lst:
+        if permission_elem.get(
+            "{http://schemas.android.com/apk/res/android}name", ""
+        ).startswith("com.YoStarEN.Arknights"):
+            root.remove(permission_elem)
+    # ------
+
+    # --- cleartext ---
+    application_elem.set(
+        "{http://schemas.android.com/apk/res/android}usesCleartextTraffic", "true"
+    )
+    # ------
 
     tree.write(manifest_filepath, encoding="utf-8", xml_declaration=True)
 
@@ -152,14 +167,13 @@ def modify_res(res_filepath):
     root = tree.getroot()
 
     string_elem = root.find("./string[@name='app_name']")
-    string_elem.text = "PvZ Online"
+    string_elem.text = "PvZ Online EN"
 
     tree.write(res_filepath, encoding="utf-8", xml_declaration=True)
 
 
 def modify_name():
     modify_res(f"{DECODED_APK_DIRPATH}/res/values/strings.xml")
-    modify_res(f"{DECODED_APK_DIRPATH}/res/values-zh/strings.xml")
 
 
 if __name__ == "__main__":

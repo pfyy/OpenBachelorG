@@ -4,7 +4,7 @@ import lzma
 import xml.etree.ElementTree as ET
 import sys
 
-APK_FILEPATH = "arknights-hg-2506.apk"
+APK_FILEPATH = "arknights-hg-2560.apk"
 DECODED_APK_DIRPATH = "ak"
 BUILT_APK_FILEPATH = "ak-g-unsigned.apk"
 SIGNED_APK_DIRPATH = "ak-g-apk"

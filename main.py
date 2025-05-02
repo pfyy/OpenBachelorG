@@ -34,6 +34,8 @@ def get_apk_filepath():
     if not apk_filepath:
         raise FileNotFoundError("err: apk filepath not given")
 
+    return apk_filepath
+
 
 def clear_last_build():
     os.system(f'rmdir /s /q "{DECODED_APK_DIRPATH}"')

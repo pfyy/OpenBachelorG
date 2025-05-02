@@ -4,6 +4,8 @@ import lzma
 import xml.etree.ElementTree as ET
 import sys
 
+from tkinter.filedialog import askopenfilename
+
 APK_FILEPATH = "arknights-hg-2506.apk"
 DECODED_APK_DIRPATH = "ak"
 BUILT_APK_FILEPATH = "ak-g-unsigned.apk"
@@ -24,6 +26,15 @@ GADGET_PORT = 10443
 ET.register_namespace("android", "http://schemas.android.com/apk/res/android")
 
 
+def get_apk_filepath():
+    if os.path.isfile(APK_FILEPATH):
+        return APK_FILEPATH
+
+    apk_filepath = askopenfilename(filetypes=[("APK", ".apk")])
+    if not apk_filepath:
+        raise FileNotFoundError("err: apk filepath not given")
+
+
 def clear_last_build():
     os.system(f'rmdir /s /q "{DECODED_APK_DIRPATH}"')
     os.system(f'del "{BUILT_APK_FILEPATH}"')
@@ -31,13 +42,14 @@ def clear_last_build():
 
 
 def decode_apk():
+    apk_filepath = get_apk_filepath()
     subprocess.run(
         [
             "java",
             "-jar",
             "apktool.jar",
             "d",
-            APK_FILEPATH,
+            apk_filepath,
             "-o",
             DECODED_APK_DIRPATH,
         ]

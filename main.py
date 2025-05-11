@@ -3,6 +3,7 @@ import subprocess
 import lzma
 import xml.etree.ElementTree as ET
 import sys
+import json
 
 from tkinter.filedialog import askopenfilename
 
@@ -14,7 +15,7 @@ SIGNED_APK_DIRPATH = "ak-g-apk"
 
 SRC_GADGET_FILEPATH = "frida-gadget-16.6.6-android-arm64.so.xz"
 DST_GADGET_FILENAME = "libflorida.so"
-
+DST_GADGET_CONF_FILENAME = "libflorida.config.so"
 
 SMALI_PATCH_FILEPATH = "smali.patch"
 PROXY_PATCH_FILEPATH = "proxy.patch"
@@ -125,6 +126,22 @@ def unzip_gadget():
         f.write(gadget_binary)
 
 
+def write_gadget_conf():
+    gadget_conf = {
+        "interaction": {
+            "type": "listen",
+            "address": "127.0.0.1",
+            "port": GADGET_PORT,
+            "on_port_conflict": "fail",
+            "on_load": "wait",
+        }
+    }
+    with open(
+        f"{DECODED_APK_DIRPATH}/lib/arm64-v8a/{DST_GADGET_CONF_FILENAME}", "w"
+    ) as f:
+        json.dump(gadget_conf, f, indent=4)
+
+
 def apply_patch(patch_filepath):
     subprocess.run(
         [
@@ -181,6 +198,7 @@ if __name__ == "__main__":
     decode_apk()
 
     unzip_gadget()
+    write_gadget_conf()
     modify_smali()
     modify_manifest()
     modify_name()

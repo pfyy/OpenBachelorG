@@ -3,6 +3,8 @@ import subprocess
 import lzma
 import xml.etree.ElementTree as ET
 import sys
+import json
+import re
 
 from tkinter.filedialog import askopenfilename
 
@@ -14,7 +16,7 @@ SIGNED_APK_DIRPATH = "ak-g-apk"
 
 SRC_GADGET_FILEPATH = "frida-gadget-16.6.6-android-arm64.so.xz"
 DST_GADGET_FILENAME = "libflorida.so"
-
+DST_GADGET_CONF_FILENAME = "libflorida.config.so"
 
 SMALI_PATCH_FILEPATH = "smali.patch"
 PROXY_PATCH_FILEPATH = "proxy.patch"
@@ -125,6 +127,22 @@ def unzip_gadget():
         f.write(gadget_binary)
 
 
+def write_gadget_conf():
+    gadget_conf = {
+        "interaction": {
+            "type": "listen",
+            "address": "127.0.0.1",
+            "port": GADGET_PORT,
+            "on_port_conflict": "fail",
+            "on_load": "wait",
+        }
+    }
+    with open(
+        f"{DECODED_APK_DIRPATH}/lib/arm64-v8a/{DST_GADGET_CONF_FILENAME}", "w"
+    ) as f:
+        json.dump(gadget_conf, f, indent=4)
+
+
 def apply_patch(patch_filepath):
     subprocess.run(
         [
@@ -142,6 +160,27 @@ def modify_smali():
 
 def apply_proxy_patch():
     apply_patch(PROXY_PATCH_FILEPATH)
+
+
+def apply_proxy_patch_v2():
+    with open("ak/smali/okhttp3/HttpUrl.smali") as f:
+        okhttp_smali_str = f.read()
+
+    with open("proxy_patch_v2.txt") as f:
+        proxy_patch_str = f.read()
+
+    okhttp_smali_str = re.sub(
+        r"\.method public static get\(Ljava/lang/String;\)Lokhttp3/HttpUrl;[\s\S]*?\.end method",
+        proxy_patch_str,
+        okhttp_smali_str,
+        count=1,
+    )
+
+    with open("ak/smali/okhttp3/HttpUrl.smali", "w") as f:
+        f.write(okhttp_smali_str)
+
+
+def apply_misc_patch():
     apply_patch(MISC_PATCH_FILEPATH)
 
 
@@ -207,12 +246,15 @@ if __name__ == "__main__":
     decode_apk()
 
     unzip_gadget()
+    write_gadget_conf()
     modify_smali()
     modify_manifest()
     modify_name()
 
     if "--proxy_patch" in sys.argv:
-        apply_proxy_patch()
+        apply_proxy_patch_v2()
+
+    apply_misc_patch()
 
     build_apk()
     sign_apk()

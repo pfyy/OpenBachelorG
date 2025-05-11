@@ -4,6 +4,7 @@ import lzma
 import xml.etree.ElementTree as ET
 import sys
 import json
+import re
 
 from tkinter.filedialog import askopenfilename
 
@@ -161,6 +162,24 @@ def apply_proxy_patch():
     apply_patch(PROXY_PATCH_FILEPATH)
 
 
+def apply_proxy_patch_v2():
+    with open("ak/smali/okhttp3/HttpUrl.smali") as f:
+        okhttp_smali_str = f.read()
+
+    with open("proxy_patch_v2.txt") as f:
+        proxy_patch_str = f.read()
+
+    okhttp_smali_str = re.sub(
+        r"\.method public static get\(Ljava/lang/String;\)Lokhttp3/HttpUrl;[\s\S]*?\.end method",
+        proxy_patch_str,
+        okhttp_smali_str,
+        count=1,
+    )
+
+    with open("ak/smali/okhttp3/HttpUrl.smali", "w") as f:
+        f.write(okhttp_smali_str)
+
+
 def apply_misc_patch():
     apply_patch(MISC_PATCH_FILEPATH)
 
@@ -207,7 +226,7 @@ if __name__ == "__main__":
     modify_name()
 
     if "--proxy_patch" in sys.argv:
-        apply_proxy_patch()
+        apply_proxy_patch_v2()
 
     apply_misc_patch()
 

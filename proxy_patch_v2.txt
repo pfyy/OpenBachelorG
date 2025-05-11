@@ -1,0 +1,120 @@
+
+.method public static redirect_url(Ljava/lang/String;)Ljava/lang/String;
+    .registers 6
+
+    .prologue
+    .line 5
+    const-string v0, "http://127.0.0.1:8443"
+
+    .line 6
+    const-string v1, "https://"
+
+    invoke-virtual {p0, v1}, Ljava/lang/String;->startsWith(Ljava/lang/String;)Z
+
+    move-result v1
+
+    if-nez v1, :cond_12
+
+    const-string v1, "http://"
+
+    invoke-virtual {p0, v1}, Ljava/lang/String;->startsWith(Ljava/lang/String;)Z
+
+    move-result v1
+
+    if-eqz v1, :cond_24
+
+    .line 7
+    :cond_12
+    const-string v1, "://"
+
+    invoke-virtual {p0, v1}, Ljava/lang/String;->indexOf(Ljava/lang/String;)I
+
+    move-result v1
+
+    add-int/lit8 v1, v1, 0x3
+
+    .line 8
+    const-string v2, "/"
+
+    invoke-virtual {p0, v2, v1}, Ljava/lang/String;->indexOf(Ljava/lang/String;I)I
+
+    move-result v1
+
+    .line 9
+    const/4 v2, -0x1
+
+    if-ne v1, v2, :cond_25
+
+    move-object p0, v0
+
+    .line 14
+    :cond_24
+    :goto_24
+    return-object p0
+
+    .line 12
+    :cond_25
+    const-string v2, "%s%s"
+
+    const/4 v3, 0x2
+
+    new-array v3, v3, [Ljava/lang/Object;
+
+    const/4 v4, 0x0
+
+    aput-object v0, v3, v4
+
+    const/4 v0, 0x1
+
+    invoke-virtual {p0, v1}, Ljava/lang/String;->substring(I)Ljava/lang/String;
+
+    move-result-object v1
+
+    aput-object v1, v3, v0
+
+    invoke-static {v2, v3}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
+
+    move-result-object p0
+
+    goto :goto_24
+.end method
+
+.method public static get(Ljava/lang/String;)Lokhttp3/HttpUrl;
+    .locals 3
+
+    invoke-static {p0}, Lokhttp3/HttpUrl;->redirect_url(Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v2
+
+    new-instance v0, Lokhttp3/HttpUrl$Builder;
+
+    invoke-direct {v0}, Lokhttp3/HttpUrl$Builder;-><init>()V
+
+    const/4 v1, 0x0
+
+    invoke-virtual {v0, v1, v2}, Lokhttp3/HttpUrl$Builder;->parse(Lokhttp3/HttpUrl;Ljava/lang/String;)Lokhttp3/HttpUrl$Builder;
+
+    move-result-object v0
+
+    invoke-virtual {v0}, Lokhttp3/HttpUrl$Builder;->build()Lokhttp3/HttpUrl;
+
+    move-result-object v0
+
+    return-object v0
+.end method
+
+.method public static get(Ljava/net/URI;)Lokhttp3/HttpUrl;
+    .locals 1
+    .annotation runtime Ljavax/annotation/Nullable;
+    .end annotation
+
+    invoke-virtual {p0}, Ljava/net/URI;->toString()Ljava/lang/String;
+
+    move-result-object v0
+
+    invoke-static {v0}, Lokhttp3/HttpUrl;->parse(Ljava/lang/String;)Lokhttp3/HttpUrl;
+
+    move-result-object v0
+
+    return-object v0
+.end method

@@ -103,18 +103,3 @@
     return-object v0
 .end method
 
-.method public static get(Ljava/net/URI;)Lokhttp3/HttpUrl;
-    .locals 1
-    .annotation runtime Ljavax/annotation/Nullable;
-    .end annotation
-
-    invoke-virtual {p0}, Ljava/net/URI;->toString()Ljava/lang/String;
-
-    move-result-object v0
-
-    invoke-static {v0}, Lokhttp3/HttpUrl;->parse(Ljava/lang/String;)Lokhttp3/HttpUrl;
-
-    move-result-object v0
-
-    return-object v0
-.end method

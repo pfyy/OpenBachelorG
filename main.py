@@ -159,6 +159,9 @@ def modify_smali():
 
 def apply_proxy_patch():
     apply_patch(PROXY_PATCH_FILEPATH)
+
+
+def apply_misc_patch():
     apply_patch(MISC_PATCH_FILEPATH)
 
 
@@ -205,6 +208,8 @@ if __name__ == "__main__":
 
     if "--proxy_patch" in sys.argv:
         apply_proxy_patch()
+
+    apply_misc_patch()
 
     build_apk()
     sign_apk()

@@ -127,16 +127,25 @@ def unzip_gadget():
         f.write(gadget_binary)
 
 
-def write_gadget_conf():
-    gadget_conf = {
-        "interaction": {
-            "type": "listen",
-            "address": "127.0.0.1",
-            "port": GADGET_PORT,
-            "on_port_conflict": "fail",
-            "on_load": "wait",
+def write_gadget_conf(standalone_flag=False):
+    if standalone_flag:
+        gadget_conf = {
+            "interaction": {
+                "type": "script-directory",
+                "path": "/sdcard/openbachelor",
+            }
         }
-    }
+
+    else:
+        gadget_conf = {
+            "interaction": {
+                "type": "listen",
+                "address": "127.0.0.1",
+                "port": GADGET_PORT,
+                "on_port_conflict": "fail",
+                "on_load": "wait",
+            }
+        }
     with open(
         f"{DECODED_APK_DIRPATH}/lib/arm64-v8a/{DST_GADGET_CONF_FILENAME}", "w"
     ) as f:
@@ -224,6 +233,13 @@ def modify_manifest():
     )
     # ------
 
+    root.append(
+        ET.Element(
+            "uses-permission",
+            {"android:name": "android.permission.MANAGE_EXTERNAL_STORAGE"},
+        )
+    )
+
     tree.write(manifest_filepath, encoding="utf-8", xml_declaration=True)
 
 
@@ -246,7 +262,11 @@ if __name__ == "__main__":
     decode_apk()
 
     unzip_gadget()
-    write_gadget_conf()
+    if "--standalone" in sys.argv:
+        standalone_flag = True
+    else:
+        standalone_flag = False
+    write_gadget_conf(standalone_flag)
     modify_smali()
     modify_manifest()
     modify_name()

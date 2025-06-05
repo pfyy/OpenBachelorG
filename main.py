@@ -21,6 +21,7 @@ DST_GADGET_CONF_FILENAME = "libflorida.config.so"
 SMALI_PATCH_FILEPATH = "smali.patch"
 PROXY_PATCH_FILEPATH = "proxy.patch"
 MISC_PATCH_FILEPATH = "misc.patch"
+MISC_ALT_PATCH_FILEPATH = "misc_alt.patch"
 
 GADGET_PORT = 10443
 
@@ -191,6 +192,7 @@ def apply_proxy_patch_v2():
 
 def apply_misc_patch():
     apply_patch(MISC_PATCH_FILEPATH)
+    apply_patch(MISC_ALT_PATCH_FILEPATH)
 
 
 def modify_manifest():

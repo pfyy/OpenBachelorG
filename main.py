@@ -14,7 +14,7 @@ BUILT_APK_FILEPATH = "ak-g-unsigned.apk"
 SIGNED_APK_DIRPATH = "ak-g-apk"
 
 
-SRC_GADGET_FILEPATH = "frida-gadget-16.6.6-android-arm64.so.xz"
+SRC_GADGET_FILEPATH = "frida-gadget-17.2.4-android-arm64.so.xz"
 DST_GADGET_FILENAME = "libflorida.so"
 DST_GADGET_CONF_FILENAME = "libflorida.config.so"
 
@@ -122,7 +122,7 @@ def unzip_gadget():
     with lzma.open(SRC_GADGET_FILEPATH) as f:
         gadget_binary = f.read()
 
-    gadget_binary = update_gadget_binary(gadget_binary)
+    # gadget_binary = update_gadget_binary(gadget_binary)
 
     with open(f"{DECODED_APK_DIRPATH}/lib/arm64-v8a/{DST_GADGET_FILENAME}", "wb") as f:
         f.write(gadget_binary)

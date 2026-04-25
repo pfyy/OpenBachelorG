@@ -13,7 +13,7 @@ DECODED_APK_DIRPATH = "ak"
 BUILT_APK_FILEPATH = "ak-g-unsigned.apk"
 SIGNED_APK_DIRPATH = "ak-g-apk"
 
-FRIDA_VERSION = "17.6.2"
+FRIDA_VERSION = "17.9.1"
 
 SRC_GADGET_FILEPATH = f"frida-gadget-{FRIDA_VERSION}-android-arm64.so.xz"
 DST_GADGET_FILENAME = "libflorida.so"

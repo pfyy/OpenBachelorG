@@ -171,7 +171,13 @@ def modify_manifest():
     tree = ET.parse(manifest_filepath)
     root = tree.getroot()
 
-    root.set("package", "anime.pvz.online")
+    match root.get("package"):
+        case "com.hypergryph.arknights":
+            root.set("package", "anime.pvz.online")
+        case "com.YoStarEN.Arknights":
+            root.set("package", "anime.pvz.online.en")
+        case _:
+            raise ValueError(f"unexpected package name {root.get('package')}")
 
     application_elem = root.find("application")
     provider_elem_lst = application_elem.findall("provider")

@@ -190,6 +190,15 @@ def modify_manifest():
         else:
             application_elem.remove(provider_elem)
 
+    # --- cn permission ---
+    permission_elem_lst = root.findall("permission")
+    for permission_elem in permission_elem_lst:
+        if permission_elem.get(
+            "{http://schemas.android.com/apk/res/android}name", ""
+        ).startswith("com.hypergryph.arknights"):
+            root.remove(permission_elem)
+    # ------
+
     # --- en permission ---
     permission_elem_lst = root.findall("permission")
     for permission_elem in permission_elem_lst:

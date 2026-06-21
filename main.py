@@ -5,6 +5,7 @@ import xml.etree.ElementTree as ET
 import sys
 import json
 import re
+from pathlib import Path
 
 from tkinter.filedialog import askopenfilename
 
@@ -242,7 +243,8 @@ def modify_res(res_filepath):
 
 def modify_name():
     modify_res(f"{DECODED_APK_DIRPATH}/res/values/strings.xml")
-    modify_res(f"{DECODED_APK_DIRPATH}/res/values-zh/strings.xml")
+    if Path(f"{DECODED_APK_DIRPATH}/res/values-zh/strings.xml").is_file():
+        modify_res(f"{DECODED_APK_DIRPATH}/res/values-zh/strings.xml")
 
 
 if __name__ == "__main__":

@@ -4,9 +4,6 @@ Build apk with gadget. For PvZ Online.
 
 Compatible with OpenBachelor Client. Able to coexist with original apk.
 
-Discord: [https://discord.gg/W4yPMpBv8F](https://discord.gg/W4yPMpBv8F)
-
-
 ## How-To
 
 ### 1. Setup

@@ -25,6 +25,8 @@ MISC_PATCH_FILEPATH = "misc.patch"
 
 SMALI_MUMU_PATCH_FILEPATH = "smali_mumu.patch"
 
+PROXY_PATCH_MUMU_FILEPATH = "proxy_patch_mumu.txt"
+
 GADGET_PORT = 10443
 
 PATCH_TMP_DIRPATH = "patch_tmp/"
@@ -262,6 +264,22 @@ def unload_lib_mumu():
             filepath.write_bytes(modified_content)
 
 
+def proxy_patch_mumu():
+    proxy_patch_mumu_text = Path(PROXY_PATCH_MUMU_FILEPATH).read_text(encoding="utf-8")
+
+    for filepath in Path(DECODED_APK_DIRPATH).glob("*/okhttp3/HttpUrl.smali"):
+        content = filepath.read_text(encoding="utf-8")
+
+        modified_content = re.sub(
+            r"\.method public static get\(Ljava/lang/String;\)Lokhttp3/HttpUrl;[\s\S]*?\.end method",
+            proxy_patch_mumu_text,
+            content,
+            count=1,
+        )
+
+        filepath.write_text(modified_content, encoding="utf-8")
+
+
 if __name__ == "__main__":
     clear_last_build()
     decode_apk()
@@ -289,6 +307,8 @@ if __name__ == "__main__":
 
     if mumu_flag:
         unload_lib_mumu()
+
+        proxy_patch_mumu()
 
     build_apk()
     sign_apk()

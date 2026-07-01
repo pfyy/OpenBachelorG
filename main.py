@@ -23,6 +23,8 @@ DST_GADGET_CONF_FILENAME = "libflorida.config.so"
 SMALI_PATCH_FILEPATH = "smali.patch"
 MISC_PATCH_FILEPATH = "misc.patch"
 
+SMALI_MUMU_PATCH_FILEPATH = "smali_mumu.patch"
+
 GADGET_PORT = 10443
 
 PATCH_TMP_DIRPATH = "patch_tmp/"
@@ -162,6 +164,10 @@ def modify_smali():
     apply_patch(SMALI_PATCH_FILEPATH)
 
 
+def modify_smali_mumu():
+    apply_patch(SMALI_MUMU_PATCH_FILEPATH)
+
+
 def apply_misc_patch():
     apply_patch(MISC_PATCH_FILEPATH)
 
@@ -256,8 +262,17 @@ if __name__ == "__main__":
         standalone_flag = True
     else:
         standalone_flag = False
+
+    if "--mumu" in sys.argv:
+        mumu_flag = True
+    else:
+        mumu_flag = False
+
     write_gadget_conf(standalone_flag)
-    modify_smali()
+    if mumu_flag:
+        modify_smali_mumu()
+    else:
+        modify_smali()
     modify_manifest()
     modify_name()
 

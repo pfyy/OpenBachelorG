@@ -253,6 +253,15 @@ def modify_name():
         modify_res(f"{DECODED_APK_DIRPATH}/res/values-zh/strings.xml")
 
 
+def unload_lib_mumu():
+    for filepath in Path(DECODED_APK_DIRPATH).rglob("*.smali"):
+        content = filepath.read_bytes()
+
+        if b'"msaoaidsec"' in content:
+            modified_content = content.replace(b'"msaoaidsec"', b'"il2cpp"')
+            filepath.write_bytes(modified_content)
+
+
 if __name__ == "__main__":
     clear_last_build()
     decode_apk()
@@ -277,6 +286,9 @@ if __name__ == "__main__":
     modify_name()
 
     apply_misc_patch()
+
+    if mumu_flag:
+        unload_lib_mumu()
 
     build_apk()
     sign_apk()

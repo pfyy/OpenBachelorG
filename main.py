@@ -260,8 +260,12 @@ def unload_lib_mumu():
         content = filepath.read_bytes()
 
         if b'"msaoaidsec"' in content:
-            modified_content = content.replace(b'"msaoaidsec"', b'"il2cpp"')
-            filepath.write_bytes(modified_content)
+            content = content.replace(b'"msaoaidsec"', b'"xlua"')
+            filepath.write_bytes(content)
+
+        if b'"anogs"' in content:
+            content = content.replace(b'"anogs"', b'"xlua"')
+            filepath.write_bytes(content)
 
 
 def proxy_patch_mumu():
